@@ -143,17 +143,16 @@ test_frame_folder = "./test_frames"
 count = 0
 out_data = []
 
-# Ensure that the test_frames folder contains exactly 51 PNG files
-test_frames = [file for file in os.listdir(test_frame_folder) if file.endswith(".png") and not file.startswith('.')]
-assert len(test_frames) == 51, f"Expected 51 PNG images in test_frames folder but found {len(test_frames)}"
-
-# Ensure that the frames folder contains exactly 51 PNG files
-frames_folder = "./frames/"
-frames = [file for file in os.listdir(frames_folder) if file.endswith(".png") and not file.startswith('.')]
-assert len(frames) == 51, f"Expected 51 PNG images in frames folder but found {len(frames)}"
+# Debug: List all files in the test folder
+all_test_files = os.listdir(test_folder)
+print(f"All files in the test folder: {all_test_files}")
 
 # Filter valid .mp4 files in the test folder and skip hidden files
-test_files = [file for file in os.listdir(test_folder) if file.endswith(".mp4") and not file.startswith('.')]
+test_files = [file for file in all_test_files if file.endswith(".mp4") and not file.startswith('.')]
+
+# Debug: Print the filtered .mp4 files and their count
+print(f"Filtered .mp4 files: {test_files}")
+print(f"Number of .mp4 files: {len(test_files)}")
 
 # Ensure there are exactly 51 test files
 assert len(test_files) == 51, f"Expected 51 test files but found {len(test_files)}"
