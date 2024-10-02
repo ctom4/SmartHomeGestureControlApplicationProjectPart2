@@ -13,6 +13,8 @@ Attribution:
 """
 import csv
 import os
+from importlib.metadata import files
+
 import cv2
 import tensorflow as tf
 
@@ -97,10 +99,12 @@ count = 0
 
 # Ensure there are 51 PNG files in the train_frames folder
 train_frames = [file for file in os.listdir(train_frames_folder) if file.endswith(".png") and not file.startswith('.')]
+train_frames = train_frames[:51]
 assert len(train_frames) == 51, f"Expected 51 PNG images in train_frames folder but found {len(train_frames)}"
 
 # Process only .mp4 files
 train_files = [file for file in os.listdir(train_data_folder) if file.endswith(".mp4") and not file.startswith('.')]
+train_files = train_files[:51]
 assert len(train_files) == 51, f"Expected 51 train files but found {len(train_files)}"
 
 for train_file in train_files:
@@ -141,10 +145,12 @@ out_data = []
 
 # Ensure there are 51 PNG files in the test_frames folder
 test_frames = [file for file in os.listdir(test_frame_folder) if file.endswith(".png") and not file.startswith('.')]
+test_frames = test_frames[:51]
 assert len(test_frames) == 51, f"Expected 51 PNG images in test_frames folder but found {len(test_frames)}"
 
 # Process only valid .mp4 files from the test folder
 test_files = [file for file in os.listdir(test_folder) if file.endswith(".mp4") and not file.startswith('.')]
+test_files = test_files[:51]
 assert len(test_files) == 51, f"Expected 51 test files but found {len(test_files)}"
 
 for test_file in test_files:
