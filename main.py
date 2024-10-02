@@ -109,6 +109,7 @@ count = 0
 
 # Ensure that the train_frames folder contains exactly 51 PNG files
 train_frames = [file for file in os.listdir(train_frames_folder) if file.endswith(".png") and not file.startswith('.')]
+train_frames = train_frames[:51]
 assert len(train_frames) == 51, f"Expected 51 PNG images in train_frames folder but found {len(train_frames)}"
 
 # Process only .mp4 files and skip hidden files
@@ -116,6 +117,7 @@ train_files = [file for file in os.listdir(train_data_folder) if file.endswith("
 
 # Ensure exactly 51 training files are processed
 train_files = train_files[:51]  # Limit to 51 files
+assert len(train_files) == 51, f"Expected 51 train files but found {len(train_files)}"
 
 for train_file in train_files:
     print(f"Processing training video: {train_file}")
@@ -146,15 +148,23 @@ test_frame_folder = "./test_frames"
 count = 0
 out_data = []
 
+# Ensure that the test_frames folder contains exactly 51 PNG files
+test_frames = [file for file in os.listdir(test_frame_folder) if file.endswith(".png") and not file.startswith('.')]
+test_frames = test_frames[:51]
+assert len(train_frames) == 51, f"Expected 51 PNG images in train_frames folder but found {len(train_frames)}"
+
 # Debug: List all files in the test folder
 all_test_files = os.listdir(test_folder)
 print(f"All files in the test folder: {all_test_files}")
 
 # Filter valid .mp4 files in the test folder and skip hidden files
 test_files = [file for file in all_test_files if file.endswith(".mp4") and not file.startswith('.')]
+print(f"Filtered .mp4 files: {test_files}")
+print(f"Number of .mp4 files: {len(test_files)}")
 
 # Ensure there are exactly 51 test files
 test_files = test_files[:51]  # Limit to 51 test files
+assert len(test_files) == 51, f"Expected 51 test files but found {len(test_files)}"
 
 for test_file in test_files:
     print(f"Processing test video: {test_file}")
@@ -177,8 +187,7 @@ for test_file in test_files:
     for train in train_data_list:
         cosine_similarity = tf.keras.losses.cosine_similarity(test_features, train.gest_feature, axis=-1)
         cos_sim = float(cosine_similarity.numpy())
-        print(
-            f"\t--> Test data {test_gest_num} vs. Train data {train.gest_num}, {train.gest_name}, {train.gest_vers} cos_sim = {cos_sim}")
+        print(f"\t--> Test data {test_gest_num} vs. Train data {train.gest_num}, {train.gest_name}, {train.gest_vers} cos_sim = {cos_sim}")
 
         if cos_sim < min_test_val:
             min_test_val = cos_sim
