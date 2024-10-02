@@ -8,8 +8,9 @@ Model = keras.models.Model
 
 """
 This is a Singleton class which bears the ml model in memory
-model is used to extract handshape 
+model is used to extract handshape features.
 """
+
 import os.path
 BASE = os.path.dirname(os.path.abspath(__file__))
 
@@ -25,10 +26,15 @@ class HandShapeFeatureExtractor:
 
     def __init__(self):
         if HandShapeFeatureExtractor.__single is None:
-            real_model = load_model(os.path.join(BASE, 'cnn_model.h5'))
-            self.model = real_model
-            HandShapeFeatureExtractor.__single = self
-
+            try:
+                # Load the model
+                real_model = load_model(os.path.join(BASE, 'cnn_model.h5'))
+                print("CNN model loaded successfully.")
+                self.model = real_model
+                HandShapeFeatureExtractor.__single = self
+            except Exception as e:
+                print(f"Error loading CNN model: {str(e)}")
+                raise
         else:
             raise Exception("This Class bears the model, so it is made Singleton")
 
@@ -41,11 +47,10 @@ class HandShapeFeatureExtractor:
             img_arr = img_arr.reshape(1, 200, 200, 1)
             return img_arr
         except Exception as e:
-            print(str(e))
+            print(f"Error during image preprocessing: {str(e)}")
             raise
 
-    # calculating dimensions for the cropping the specific hand parts
-    # Need to change constant 80 based on the video dimensions
+    # calculating dimensions for cropping the specific hand parts
     @staticmethod
     def __bound_box(x, y, max_y, max_x):
         y1 = y + 80
@@ -65,9 +70,13 @@ class HandShapeFeatureExtractor:
     def extract_feature(self, image):
         try:
             img_arr = self.__pre_process_input_image(image)
-            # input = tf.keras.Input(tensor=image)
-            return self.model.predict(img_arr)
+            print(f"Extracting features from processed image of shape {img_arr.shape}")
+            # Predict features
+            features = self.model.predict(img_arr)
+            print(f"Features extracted successfully: {features}")
+            return features
         except Exception as e:
+            print(f"Error during feature extraction: {str(e)}")
             raise
 
 
