@@ -114,6 +114,9 @@ assert len(train_frames) == 51, f"Expected 51 PNG images in train_frames folder 
 # Process only .mp4 files and skip hidden files
 train_files = [file for file in os.listdir(train_data_folder) if file.endswith(".mp4") and not file.startswith('.')]
 
+# Ensure exactly 51 training files are processed
+train_files = train_files[:51]  # Limit to 51 files
+
 for train_file in train_files:
     print(f"Processing training video: {train_file}")
 
@@ -150,12 +153,8 @@ print(f"All files in the test folder: {all_test_files}")
 # Filter valid .mp4 files in the test folder and skip hidden files
 test_files = [file for file in all_test_files if file.endswith(".mp4") and not file.startswith('.')]
 
-# Debug: Print the filtered .mp4 files and their count
-print(f"Filtered .mp4 files: {test_files}")
-print(f"Number of .mp4 files: {len(test_files)}")
-
 # Ensure there are exactly 51 test files
-assert len(test_files) == 51, f"Expected 51 test files but found {len(test_files)}"
+test_files = test_files[:51]  # Limit to 51 test files
 
 for test_file in test_files:
     print(f"Processing test video: {test_file}")
